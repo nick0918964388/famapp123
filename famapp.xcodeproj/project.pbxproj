@@ -168,7 +168,6 @@
 		D5149A192EFB97280008E00C = {
 			isa = PBXGroup;
 			children = (
-				D5DE80622EFD819B00371E67 /* New Group */,
 				D5DE805B2EFCC0D400371E67 /* Components */,
 				D5DE802D2EFCC0C900371E67 /* Features */,
 				D5DE80282EFCC05100371E67 /* Theme */,
@@ -506,13 +505,6 @@
 			);
 			name = Components;
 			path = famapp/Components;
-			sourceTree = "<group>";
-		};
-		D5DE80622EFD819B00371E67 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
