@@ -57,7 +57,7 @@ struct ParentOverviewTabView: View {
 
                 StatCard(
                     title: "總工時",
-                    value: String(format: "%.1f", viewModel.totalManpowerHours),
+                    value: "\(Int(viewModel.totalManpowerHours))",
                     subtitle: "小時",
                     icon: "person.fill",
                     color: .purple

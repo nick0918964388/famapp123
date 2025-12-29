@@ -13,8 +13,8 @@ enum WorkOrderStatus: String, Codable, CaseIterable {
 
     var color: Color {
         switch self {
-        case .pendingReport: return .orange
-        case .reported: return .gray
+        case .pendingReport: return .gray
+        case .reported: return .orange
         }
     }
 }
