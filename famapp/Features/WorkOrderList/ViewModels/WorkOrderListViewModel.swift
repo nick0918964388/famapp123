@@ -23,6 +23,30 @@ final class WorkOrderListViewModel: ObservableObject {
     var filteredParentWorkOrders: [ParentWorkOrder] {
         var orders = parentWorkOrders
 
+        let today = Calendar.current.startOfDay(for: Date())
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today) ?? Date()
+        let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: today) ?? Date()
+
+        // Apply tab filter
+        orders = orders.map { parent in
+            var filtered = parent
+            filtered.childOrders = parent.childOrders.filter { child in
+                switch selectedFilter {
+                case .beforeToday:
+                    return child.scheduledDate < tomorrow
+                case .lastWeek:
+                    return child.scheduledDate >= oneWeekAgo && child.scheduledDate < tomorrow
+                case .overdue:
+                    return child.executionDeadline < today && child.displayStatus == .pendingReport
+                case .all:
+                    return true
+                case .todayCompleted:
+                    return child.displayStatus == .reported && child.lastModified >= today && child.lastModified < tomorrow
+                }
+            }
+            return filtered
+        }.filter { !$0.childOrders.isEmpty }
+
         // Apply search filter
         if !searchText.isEmpty {
             orders = orders.map { parent in
@@ -104,7 +128,8 @@ final class WorkOrderListViewModel: ObservableObject {
         errorMessage = nil
 
         do {
-            parentWorkOrders = try await dataService.fetchParentWorkOrders(filter: selectedFilter)
+            // 總是載入全部資料，篩選在本地進行
+            parentWorkOrders = try await dataService.fetchParentWorkOrders(filter: nil)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -117,10 +142,8 @@ final class WorkOrderListViewModel: ObservableObject {
     }
 
     func selectFilter(_ filter: FilterType) {
+        // 只更新篩選條件，不重新載入資料（篩選在 filteredParentWorkOrders 中進行）
         selectedFilter = filter
-        Task {
-            await loadWorkOrders()
-        }
     }
 
     func toggleParentExpanded(_ parentId: UUID) {
