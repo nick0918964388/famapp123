@@ -78,7 +78,7 @@ struct ManpowerTabView: View {
             Text("姓名")
                 .frame(width: 80, alignment: .leading)
             Text("工時")
-                .frame(width: 50, alignment: .center)
+                .frame(width: 90, alignment: .center)
             Text("備註")
                 .frame(minWidth: 60, alignment: .leading)
             Spacer()
@@ -99,7 +99,7 @@ struct ManpowerRow: View {
     let onNotesChanged: (String) -> Void
     let onDelete: () -> Void
 
-    @State private var hoursText: String = ""
+    @State private var hours: Int = 0
     @State private var notesText: String = ""
 
     var body: some View {
@@ -115,12 +115,35 @@ struct ManpowerRow: View {
                 .frame(width: 80, alignment: .leading)
                 .lineLimit(1)
 
-            Text(String(format: "%.1f", manpower.maintenanceHours))
-                .font(.caption)
-                .frame(width: 50, alignment: .center)
-                .padding(4)
-                .background(Color(UIColor.tertiarySystemBackground))
-                .cornerRadius(4)
+            // 工時調整器
+            HStack(spacing: 4) {
+                Button(action: {
+                    if hours > 0 {
+                        hours -= 1
+                        onHoursChanged(Double(hours))
+                    }
+                }) {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.title3)
+                        .foregroundColor(hours > 0 ? .orange : .gray.opacity(0.4))
+                }
+                .buttonStyle(.plain)
+
+                Text("\(hours)")
+                    .font(.subheadline.bold())
+                    .frame(width: 30, alignment: .center)
+
+                Button(action: {
+                    hours += 1
+                    onHoursChanged(Double(hours))
+                }) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title3)
+                        .foregroundColor(.orange)
+                }
+                .buttonStyle(.plain)
+            }
+            .frame(width: 90)
 
             TextField("備註", text: $notesText)
                 .font(.caption)
@@ -142,6 +165,9 @@ struct ManpowerRow: View {
             .frame(width: 32)
         }
         .padding(.vertical, 4)
+        .onAppear {
+            hours = Int(manpower.maintenanceHours)
+        }
     }
 }
 
