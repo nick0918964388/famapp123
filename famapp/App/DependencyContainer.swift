@@ -32,4 +32,4 @@ protocol DataServiceProtocol {
     // New methods for material selection and parent work order
     func fetchAvailableMaterials() async throws -> [MaterialOption]
     func saveParentWorkOrder(_ parentWorkOrder: ParentWorkOrder) async throws
-}
+

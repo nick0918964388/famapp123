@@ -74,11 +74,11 @@ final class ParentWorkOrderDetailViewModel: ObservableObject {
     }
 
     var completedChildCount: Int {
-        parentWorkOrder.childOrders.filter { $0.status == .reported }.count
+        parentWorkOrder.childOrders.filter { $0.displayStatus == .reported }.count
     }
 
     var pendingChildCount: Int {
-        parentWorkOrder.childOrders.filter { $0.status == .pendingReport }.count
+        parentWorkOrder.childOrders.filter { $0.displayStatus == .pendingReport }.count
     }
 
     var aggregatedManpower: [Manpower] {
@@ -109,14 +109,15 @@ final class ParentWorkOrderDetailViewModel: ObservableObject {
 
     // MARK: - Initialization
 
-    init(parentWorkOrder: ParentWorkOrder, dataService: DataServiceProtocol = DependencyContainer.shared.dataService) {
+    init(parentWorkOrder: ParentWorkOrder, initialSelectedChildId: UUID? = nil, dataService: DataServiceProtocol = DependencyContainer.shared.dataService) {
         self.parentWorkOrder = parentWorkOrder
         self.originalState = parentWorkOrder
         self.dataService = dataService
 
-        // Start with parent view selected (selectedChildId = nil means parent view)
-        self.selectedChildId = nil
-        self.isViewingParent = true
+        // If initialSelectedChildId is provided, start with that child selected
+        // Otherwise start with parent view
+        self.selectedChildId = initialSelectedChildId
+        self.isViewingParent = (initialSelectedChildId == nil)
     }
 
     // MARK: - Child Order Selection

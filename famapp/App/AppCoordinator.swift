@@ -43,11 +43,13 @@ final class AppCoordinator: ObservableObject {
     }
 
     func checkAuthentication() {
-        // Check if user has valid token
-        if let _ = KeychainManager.shared.getToken() {
+        // Check if user has valid token and it's not expired
+        if let token = KeychainManager.shared.getToken(), !token.isExpired {
             // TODO: Validate token with server
             authState = .authenticated(userId: "user")
         } else {
+            // Clear expired token if exists
+            KeychainManager.shared.clearAll()
             authState = .unauthenticated
         }
     }

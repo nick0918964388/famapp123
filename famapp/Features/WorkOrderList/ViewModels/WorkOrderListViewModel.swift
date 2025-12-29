@@ -73,9 +73,9 @@ final class WorkOrderListViewModel: ObservableObject {
 
         counts[.beforeToday] = allOrders.count
         counts[.lastWeek] = min(allOrders.count, 5)
-        counts[.overdue] = allOrders.filter { $0.status == .pendingReport }.count
+        counts[.overdue] = allOrders.filter { $0.displayStatus == .pendingReport }.count
         counts[.all] = allOrders.count
-        counts[.todayCompleted] = allOrders.filter { $0.status == .reported }.count
+        counts[.todayCompleted] = allOrders.filter { $0.displayStatus == .reported }.count
 
         return counts
     }

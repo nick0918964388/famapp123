@@ -30,7 +30,7 @@ struct WorkOrderDetailView: View {
                 HStack {
                     Text(viewModel.workOrder.orderNumber)
                         .font(.headline)
-                    StatusBadge(status: viewModel.workOrder.status)
+                    StatusBadge(status: viewModel.workOrder.displayStatus)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {

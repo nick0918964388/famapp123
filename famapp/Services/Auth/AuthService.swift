@@ -52,7 +52,7 @@ final class AuthService: ObservableObject {
         let mockToken = AuthToken(
             accessToken: "mock_access_token_\(UUID().uuidString)",
             refreshToken: "mock_refresh_token_\(UUID().uuidString)",
-            expiresAt: Date().addingTimeInterval(86400 * 7) // 7 days
+            expiresAt: Date().addingTimeInterval(600) // 10 mins
         )
 
         // Save to keychain

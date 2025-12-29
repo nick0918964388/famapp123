@@ -6,8 +6,8 @@ struct ParentWorkOrderDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isChildHeaderCollapsed = true
 
-    init(parentWorkOrder: ParentWorkOrder) {
-        _viewModel = StateObject(wrappedValue: ParentWorkOrderDetailViewModel(parentWorkOrder: parentWorkOrder))
+    init(parentWorkOrder: ParentWorkOrder, initialSelectedChildId: UUID? = nil) {
+        _viewModel = StateObject(wrappedValue: ParentWorkOrderDetailViewModel(parentWorkOrder: parentWorkOrder, initialSelectedChildId: initialSelectedChildId))
     }
 
     var body: some View {
@@ -84,7 +84,7 @@ struct ParentWorkOrderDetailView: View {
         HStack {
             Text(viewModel.parentWorkOrder.orderNumber)
                 .font(.headline)
-            StatusBadge(status: viewModel.parentWorkOrder.status)
+            StatusBadge(status: viewModel.parentWorkOrder.displayStatus)
         }
     }
 

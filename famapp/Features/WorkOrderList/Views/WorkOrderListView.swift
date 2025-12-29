@@ -180,7 +180,7 @@ struct WorkOrderListView: View {
     private func childWorkOrderRows(for parent: ParentWorkOrder) -> some View {
         ForEach(parent.childOrders) { child in
             NavigationLink {
-                ParentWorkOrderDetailView(parentWorkOrder: parent)
+                ParentWorkOrderDetailView(parentWorkOrder: parent, initialSelectedChildId: child.id)
             } label: {
                 ChildWorkOrderRow(workOrder: child)
             }
@@ -274,7 +274,7 @@ struct SingleWorkOrderRow: View {
                 .frame(width: 80, alignment: .leading)
 
             // Status
-            StatusBadge(status: workOrder.status)
+            StatusBadge(status: workOrder.displayStatus)
         }
         .padding(.vertical, 4)
     }
@@ -316,7 +316,7 @@ struct ParentWorkOrderRow: View {
                     Spacer()
 
                     // Status indicator
-                    StatusBadge(status: parent.status)
+                    StatusBadge(status: parent.displayStatus)
 
                     Image(systemName: "chevron.right")
                         .font(.caption)
@@ -376,7 +376,7 @@ struct ChildWorkOrderRow: View {
                 .frame(width: 80, alignment: .leading)
 
             // Status
-            StatusBadge(status: workOrder.status)
+            StatusBadge(status: workOrder.displayStatus)
         }
         .padding(.vertical, 4)
     }

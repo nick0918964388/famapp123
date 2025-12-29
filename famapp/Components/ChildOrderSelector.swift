@@ -94,9 +94,9 @@ struct ChildOrderButton: View {
                 // 狀態
                 HStack(spacing: 4) {
                     Circle()
-                        .fill(order.status.color)
+                        .fill(order.displayStatus.color)
                         .frame(width: 6, height: 6)
-                    Text(order.status.displayName)
+                    Text(order.displayStatus.displayName)
                         .font(.caption2)
                 }
                 .foregroundColor(isSelected ? .white.opacity(0.8) : .secondary)
@@ -140,8 +140,8 @@ struct CompactChildOrderSelector: View {
                 ForEach(Array(childOrders.enumerated()), id: \.element.id) { index, order in
                     CompactSelectorButton(
                         title: order.assetNumber,
-                        subtitle: order.status.displayName,
-                        statusColor: order.status.color,
+                        subtitle: order.displayStatus.displayName,
+                        statusColor: order.displayStatus.color,
                         isSelected: selectedChildId == order.id,
                         isFirst: !showParentOption && index == 0,
                         isLast: index == childOrders.count - 1

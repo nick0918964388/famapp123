@@ -10,7 +10,16 @@ struct ParentWorkOrder: Identifiable, Codable, Equatable {
     let childCount: Int                  // 母工單(3) - count of children
 
     var pendingCount: Int {
-        childOrders.filter { $0.status == .pendingReport }.count
+        childOrders.filter { $0.displayStatus == .pendingReport }.count
+    }
+
+    /// 顯示用狀態（根據子工單實際填寫情況判斷）
+    var displayStatus: WorkOrderStatus {
+        // 如果有任一子工單已回報，母工單顯示已回報
+        if childOrders.contains(where: { $0.hasAnyResponse }) {
+            return .reported
+        }
+        return status
     }
 }
 
@@ -49,6 +58,26 @@ struct WorkOrder: Identifiable, Codable, Equatable {
     var lastModified: Date
     var syncStatus: SyncStatus
     var uploadHistory: [UploadRecord]
+
+    /// 是否有任何回報資料
+    var hasAnyResponse: Bool {
+        // 檢查是否有任一保養作業程序已填寫結果
+        let hasProcedureResult = maintenanceProcedures.contains { $0.result != nil }
+        // 檢查是否有實際開工日或完工日
+        let hasActualDates = actualStartDate != nil || actualCompletionDate != nil
+        // 檢查是否有材料使用數量
+        let hasMaterialUsed = materials.contains { $0.usedQuantity > 0 }
+
+        return hasProcedureResult || hasActualDates || hasMaterialUsed
+    }
+
+    /// 顯示用狀態（根據實際填寫情況判斷）
+    var displayStatus: WorkOrderStatus {
+        if hasAnyResponse {
+            return .reported
+        }
+        return status
+    }
 
     static func == (lhs: WorkOrder, rhs: WorkOrder) -> Bool {
         lhs.id == rhs.id

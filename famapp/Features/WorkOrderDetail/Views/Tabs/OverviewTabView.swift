@@ -113,7 +113,7 @@ struct WorkOrderSubTabView: View {
                         .foregroundColor(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    StatusBadge(status: viewModel.workOrder.status)
+                    StatusBadge(status: viewModel.workOrder.displayStatus)
                         .frame(width: 80, alignment: .trailing)
                 }
             }
