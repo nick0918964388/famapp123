@@ -15,11 +15,9 @@ struct ParentWorkOrder: Identifiable, Codable, Equatable {
 
     /// 顯示用狀態（根據子工單實際填寫情況判斷）
     var displayStatus: WorkOrderStatus {
-        // 如果有任一子工單已回報，母工單顯示已回報
-        if childOrders.contains(where: { $0.hasAnyResponse }) {
-            return .reported
-        }
-        return status
+        // 純粹根據子工單是否有回報資料來判斷
+        let hasAnyChildResponse = childOrders.contains(where: { $0.hasAnyResponse })
+        return hasAnyChildResponse ? .reported : .pendingReport
     }
 }
 
@@ -73,10 +71,8 @@ struct WorkOrder: Identifiable, Codable, Equatable {
 
     /// 顯示用狀態（根據實際填寫情況判斷）
     var displayStatus: WorkOrderStatus {
-        if hasAnyResponse {
-            return .reported
-        }
-        return status
+        // 純粹根據是否有回報資料來判斷狀態
+        return hasAnyResponse ? .reported : .pendingReport
     }
 
     static func == (lhs: WorkOrder, rhs: WorkOrder) -> Bool {
