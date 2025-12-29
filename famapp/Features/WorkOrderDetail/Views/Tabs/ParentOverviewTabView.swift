@@ -172,6 +172,14 @@ struct ChildOrderCard: View {
     let isSelected: Bool
     var onTap: () -> Void
 
+    private var completedCount: Int {
+        order.maintenanceProcedures.filter { $0.result != nil }.count
+    }
+
+    private var totalCount: Int {
+        order.maintenanceProcedures.count
+    }
+
     var body: some View {
         Button(action: onTap) {
             HStack {
@@ -181,12 +189,14 @@ struct ChildOrderCard: View {
                     .frame(width: 10, height: 10)
 
                 VStack(alignment: .leading, spacing: 4) {
+                    // 資產編號
                     Text(order.assetNumber)
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
 
-                    Text(order.description)
+                    // 資產說明（設備說明）
+                    Text(order.equipmentDescription)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
@@ -194,18 +204,16 @@ struct ChildOrderCard: View {
 
                 Spacer()
 
-                // Procedure completion
+                // 完成進度與狀態
                 VStack(alignment: .trailing, spacing: 2) {
-                    let completed = order.maintenanceProcedures.filter { $0.result != nil }.count
-                    let total = order.maintenanceProcedures.count
-
-                    Text("\(completed)/\(total)")
+                    Text("\(completedCount)/\(totalCount)")
                         .font(.caption)
                         .fontWeight(.medium)
 
-                    Text("已完成")
+                    // 根據 displayStatus 顯示狀態
+                    Text(order.displayStatus.displayName)
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(order.displayStatus.color)
                 }
 
                 Image(systemName: "chevron.right")
