@@ -240,40 +240,41 @@ struct SingleWorkOrderRow: View {
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd\nHH:mm"
+        formatter.dateFormat = "yyyy/MM/dd"
         return formatter
     }()
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
+            // 資產編號 + 資產說明
             VStack(alignment: .leading, spacing: 4) {
-                Text(parent.orderNumber)
+                Text(workOrder.assetNumber)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text(workOrder.description)
+                Text(workOrder.equipmentDescription)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .lineLimit(2)
+                    .lineLimit(1)
             }
             .frame(minWidth: 100, alignment: .leading)
 
             Spacer()
 
-            // Dates
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(dateFormatter.string(from: workOrder.scheduledDate))
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
+            // 預計執行日
+            Text(dateFormatter.string(from: workOrder.scheduledDate))
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .frame(width: 75, alignment: .center)
 
-            // Reporter
+            // 回報人員
             Text(workOrder.reporterID)
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 70, alignment: .leading)
+                .lineLimit(1)
 
-            // Status
+            // 狀態
             StatusBadge(status: workOrder.displayStatus)
         }
         .padding(.vertical, 4)
@@ -336,7 +337,7 @@ struct ChildWorkOrderRow: View {
 
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd\nHH:mm"
+        formatter.dateFormat = "yyyy/MM/dd"
         return formatter
     }()
 
@@ -348,34 +349,35 @@ struct ChildWorkOrderRow: View {
                 .frame(width: 1)
                 .padding(.leading, 8)
 
+            // 資產編號 + 資產說明
             VStack(alignment: .leading, spacing: 4) {
-                Text(workOrder.orderNumber)
+                Text(workOrder.assetNumber)
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                Text(workOrder.description)
+                Text(workOrder.equipmentDescription)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .lineLimit(2)
+                    .lineLimit(1)
             }
             .frame(minWidth: 100, alignment: .leading)
 
             Spacer()
 
-            // Dates
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(dateFormatter.string(from: workOrder.scheduledDate))
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
+            // 預計執行日
+            Text(dateFormatter.string(from: workOrder.scheduledDate))
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .frame(width: 75, alignment: .center)
 
-            // Reporter
+            // 回報人員
             Text(workOrder.reporterID)
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 70, alignment: .leading)
+                .lineLimit(1)
 
-            // Status
+            // 狀態
             StatusBadge(status: workOrder.displayStatus)
         }
         .padding(.vertical, 4)

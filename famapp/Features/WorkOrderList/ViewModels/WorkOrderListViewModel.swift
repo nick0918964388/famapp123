@@ -71,11 +71,26 @@ final class WorkOrderListViewModel: ObservableObject {
         var counts: [FilterType: Int] = [:]
         let allOrders = parentWorkOrders.flatMap { $0.childOrders }
 
-        counts[.beforeToday] = allOrders.count
-        counts[.lastWeek] = min(allOrders.count, 5)
-        counts[.overdue] = allOrders.filter { $0.displayStatus == .pendingReport }.count
+        let today = Calendar.current.startOfDay(for: Date())
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today) ?? Date()
+        let oneWeekAgo = Calendar.current.date(byAdding: .day, value: -7, to: today) ?? Date()
+
+        // 本日(含)以前：預計執行日 <= 今天
+        counts[.beforeToday] = allOrders.filter { $0.scheduledDate < tomorrow }.count
+
+        // 近一週：預計執行日在過去7天內
+        counts[.lastWeek] = allOrders.filter { $0.scheduledDate >= oneWeekAgo && $0.scheduledDate < tomorrow }.count
+
+        // 逾期：執行期限已過 且 尚未回報
+        counts[.overdue] = allOrders.filter { $0.executionDeadline < today && $0.displayStatus == .pendingReport }.count
+
+        // 全部
         counts[.all] = allOrders.count
-        counts[.todayCompleted] = allOrders.filter { $0.displayStatus == .reported }.count
+
+        // 本日完成：今天回報完成的
+        counts[.todayCompleted] = allOrders.filter {
+            $0.displayStatus == .reported && $0.lastModified >= today && $0.lastModified < tomorrow
+        }.count
 
         return counts
     }
