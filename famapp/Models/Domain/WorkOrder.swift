@@ -80,7 +80,11 @@ struct WorkOrder: Identifiable, Codable, Equatable {
     }
 
     static func == (lhs: WorkOrder, rhs: WorkOrder) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.status == rhs.status &&
+        lhs.hasAnyResponse == rhs.hasAnyResponse &&
+        lhs.actualStartDate == rhs.actualStartDate &&
+        lhs.actualCompletionDate == rhs.actualCompletionDate
     }
 
     func hash(into hasher: inout Hasher) {

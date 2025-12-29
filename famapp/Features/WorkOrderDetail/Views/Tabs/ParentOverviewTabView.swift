@@ -177,7 +177,7 @@ struct ChildOrderCard: View {
             HStack {
                 // Status indicator
                 Circle()
-                    .fill(order.status.color)
+                    .fill(order.displayStatus.color)
                     .frame(width: 10, height: 10)
 
                 VStack(alignment: .leading, spacing: 4) {

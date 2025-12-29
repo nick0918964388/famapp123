@@ -28,8 +28,8 @@ protocol DataServiceProtocol {
     func fetchWorkOrderDetail(id: String) async throws -> WorkOrder
     func saveWorkOrder(_ workOrder: WorkOrder) async throws
     func downloadWorkOrder(id: String) async throws -> WorkOrder
-
+    
     // New methods for material selection and parent work order
     func fetchAvailableMaterials() async throws -> [MaterialOption]
     func saveParentWorkOrder(_ parentWorkOrder: ParentWorkOrder) async throws
-
+}
